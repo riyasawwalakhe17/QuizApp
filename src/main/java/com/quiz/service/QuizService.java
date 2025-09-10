@@ -1,6 +1,7 @@
 package com.quiz.service;
 
 import com.quiz.dto.QuestionDto;
+import com.quiz.request.QuizRequest;
 
 import java.util.List;
 
@@ -10,5 +11,5 @@ public interface QuizService {
 
     List<QuestionDto> getQuizQuestions(int id);
 
-
+    String submitQuiz(List<QuizRequest> request, int quizId);
 }

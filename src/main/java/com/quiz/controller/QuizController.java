@@ -1,6 +1,7 @@
 package com.quiz.controller;
 
 import com.quiz.dto.QuestionDto;
+import com.quiz.request.QuizRequest;
 import com.quiz.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,5 +29,11 @@ public class QuizController {
     public ResponseEntity<List<QuestionDto>> getQuizQuestions(@PathVariable("id") int id){
         List<QuestionDto> dtoList = this.quizService.getQuizQuestions(id);
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
+    @PostMapping("/submit/{id}")
+    public ResponseEntity<String> submitQuiz(@RequestBody List<QuizRequest> request, @PathVariable ("id") int quizId){
+        String msg = quizService.submitQuiz(request,quizId);
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 }

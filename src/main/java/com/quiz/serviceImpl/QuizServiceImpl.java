@@ -3,7 +3,9 @@ package com.quiz.serviceImpl;
 import com.quiz.dto.QuestionDto;
 import com.quiz.entity.Questions;
 import com.quiz.entity.Quiz;
+import com.quiz.repository.QuestionRepository;
 import com.quiz.repository.QuizRepository;
+import com.quiz.request.QuizRequest;
 import com.quiz.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,8 @@ public class QuizServiceImpl implements QuizService {
     @Autowired
     private QuizRepository quizRepository;
 
-
+    @Autowired
+    private QuestionRepository  questionRepository;
 
     @Override
     public String createQuiz(String quizName, int noOfQuestions, String category) {
@@ -42,5 +45,28 @@ public class QuizServiceImpl implements QuizService {
             questionDtoList.add(dto);
         }
         return questionDtoList;
+    }
+
+    @Override
+    public String submitQuiz(List<QuizRequest> request, int quizId) {
+
+        Quiz quiz = quizRepository.findById(quizId).get();
+        List<Questions> questionListOfQuiz = quiz.getQuestionList();
+        int correctAnswer = 0;
+        for(Questions q:questionListOfQuiz){
+            for(QuizRequest quizRequest :request ){
+                if(quizRequest.getQId() == q.getId()){
+                    if(quizRequest.getOptionSelect() == q.getCorrectOption()){
+                        correctAnswer++;
+                    }
+                }
+                else{
+                    //question is not from Quiz
+                }
+            }
+        }
+        String msg = "Your score is : " + correctAnswer;
+
+        return msg;
     }
 }
